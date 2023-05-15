@@ -7,7 +7,7 @@ import axios from "axios";
 // });
 
 const http = axios.create({
-  banse: '',
+  baseURL: '/api',
   timeout: 10000
 })
 

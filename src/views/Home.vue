@@ -55,16 +55,20 @@
 
         <!--  -->
         <el-card>
-          折线
+          <div ref="echarts_zx" style="height: 360px;"></div>
         </el-card>
 
         <!--  -->
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-card>1</el-card>
+            <el-card>
+              <div ref="echarts_zz" style="height: 290px;"></div>
+            </el-card>
           </el-col>
           <el-col :span="12">
-            <el-card>1</el-card>
+            <el-card>
+              <div ref="echarts_sx" style="height: 290px;"></div>
+            </el-card>
           </el-col>
         </el-row>
       </el-col>
@@ -75,6 +79,8 @@
 
 <script>
 import { getDate } from '../api/index'
+import * as echarts from 'echarts';
+
 export default {
   data() {
     return {
@@ -84,44 +90,10 @@ export default {
         monthBuy: '本月购买',
         totalBuy: '总购买'
       },
-      tableData: [
-        {
-          name: 'oppo',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: 'vivo',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '苹果',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '小米',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '三星',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '魅族',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        }
-      ],
+      tableData: [],
+      orderData: [],
+      userData: [],
+      videoData: [],
       countData: [
         {
           name: "今日支付订单",
@@ -162,11 +134,138 @@ export default {
       ]
     }
   },
-  mounted(){
-    // console.log(getDate)
-    getDate().then((data) => {
-      console.log(data)
+  created() {
+
+  },
+  mounted() {
+    getDate().then(({ data }) => {
+      const { tableData, orderData, userData, videoData } = data.data;
+      this.tableData = tableData
+      this.orderData = orderData
+      this.userData = userData
+      this.videoData = videoData
     })
+  },
+  methods: {
+    upEchartsZx: function () {
+      var myecharts = echarts.init(this.$refs.echarts_zx)
+      const option = {
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: this.orderData.date
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: this.orderData.data
+      };
+      option && myecharts.setOption(option);
+      console.log("Home.vue , upEchartsZx", this.orderData.date)
+    },
+    upEchartsZz: function () {
+      var myecharts = echarts.init(this.$refs.echarts_zz)
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        // 图例
+        legend: {},
+        xAxis: {
+          type: 'category',
+          // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: this.userData.map(item => item.date)
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: '新增用户',
+            // data: [120, 200, 150, 80, 70, 110, 130],
+            data: this.userData.map(item => item.new),
+            type: 'bar'
+          },
+          {
+            name: '活跃用户',
+            // data: [120, 200, 150, 80, 70, 110, 130],
+            data: this.userData.map(item => item.active),
+            type: 'bar'
+          }
+        ]
+      };
+      option && myecharts.setOption(option);
+      console.log("Home.vue , upEchartsZz", this.userData)
+    },
+    upEchartsSx: function () {
+      var myecharts = echarts.init(this.$refs.echarts_sx)
+      const option = {
+        legend: {
+          top: 'bottom'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            name: '饼图测试',
+            type: 'pie',
+            // radius: [20, 100],
+            radius: '50%',
+            // center: ['50%', '50%'],
+            // roseType: 'area',
+            // itemStyle: {
+            //   borderRadius: 8
+            // },
+            data: this.videoData
+          }
+        ]
+      };
+      option && myecharts.setOption(option);
+      console.log("Home.vue , upEchartsSx", this.videoData)
+    }
+  },
+  watch: {
+    tableData(e) {
+      this.$nextTick(() => {
+        this.tableData = e
+        console.log(e)
+      })
+    },
+    orderData: {
+      handler(newDate, oldDate) {
+        console.log('newDate', newDate)
+        console.log('oldDate', oldDate)
+        this.upEchartsZx()
+      },
+      // 深度监听
+      deep: true
+    },
+    userData: {
+      handler() {
+        this.upEchartsZz()
+      },
+      deep: true
+    },
+    videoData: {
+      handler() {
+        this.upEchartsSx()
+      },
+      deep: true
+    }
   }
 }
 </script>
