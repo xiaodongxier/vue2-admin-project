@@ -2,9 +2,9 @@
   <div class="header_contain">
     <div class="header_contain_l">
       <el-button icon="el-icon-menu" size="mini" @click="btnClickAside"></el-button>
-      <span class="text">首页</span>
+      <!-- <span class="text">首页</span> -->
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/' }" v-for="item in Breadcrumb" :key="item.name">{{ item.label }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: item.path }" v-for="(item,index) in tags" :key="item.name" @click.native="addClass(index)" :class="{ actived:index==current}">{{ item.label}}</el-breadcrumb-item>
         <!-- <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
         <el-breadcrumb-item>活动列表</el-breadcrumb-item>
         <el-breadcrumb-item>活动详情</el-breadcrumb-item> -->
@@ -25,20 +25,38 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
+  data() {
+    return {
+      current:0
+    }
+  },
   methods: {
     btnClickAside() {
       // console.log(this.$store)
       // console.log(this.$store.state.tab.isCollapse)
       this.$store.commit('collspseMenu')
       // console.log(this.$store.state.tab.isCollapse)
-    }
+    },
+    handleBtnClick(index){
+        console.log(index)
+    },
+    addClass:function(index){
+                this.current=index;
+        console.log(this.current)
+            }
   },
   computed: {
-    Breadcrumb() {
-      return this.$store.state.tab.tabBreadcrumb
-      // console.log(this.$store.state.tab.tabBreadcrumb)
-    }
+    // getBreadcrumb() {
+    //   return this.$store.state.tab.tabBreadcrumb
+    // },
+    ...mapState({
+      tags: state => state.tab.tabBreadcrumb
+    })
+  },
+  mounted() {
+    console.log('this.tags=====', this.tags)
   }
 }
 </script>
@@ -52,6 +70,31 @@ export default {
   align-items: center;
   padding: 0 20px;
 
+  .header_contain_l {
+    display: flex;
+    align-items: center;
+    // background: red;
+    .el-breadcrumb {
+      margin-left: 10px;
+      /deep/.el-breadcrumb__item {
+        .el-breadcrumb__inner {
+          &.is-link {
+            color: #a8a8a8;
+          }
+        }
+
+        &.actived ,
+        // &:last-child {
+        :last-child {
+          .el-breadcrumb__inner {
+            color: #fff;
+          }
+
+        }
+      }
+    }
+  }
+
   .text {
     color: #fff;
     font-size: 14px;
@@ -64,5 +107,4 @@ export default {
     border-radius: 50%;
     vertical-align: middle;
   }
-}
-</style>
+}</style>
