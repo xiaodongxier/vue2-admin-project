@@ -1,7 +1,8 @@
 <template>
   <div class="tagsList">
     <!-- <el-tag :closable="item.name == 'home' ? false : true" v-for="item in tagsList" :key="item.name">{{ item.label }}</el-tag> -->
-    <el-tag :closable="item.name !== 'home'" v-for="item in tagsList" :key="item.name"  :effect="$route.name == item.name ? 'dark' : 'light'" @click="btnOpenPage(item)">{{ item.label }}</el-tag>
+    <el-tag :closable="item.name !== 'home'" v-for="item in tagsList" :key="item.name"
+      :effect="$route.name == item.name ? 'dark' : 'light'" @click="btnOpenPage(item)">{{ item.label }}</el-tag>
   </div>
 </template>
 
@@ -20,10 +21,10 @@ export default {
   //   };
   // },
   methods: {
-    btnOpenPage(item){
+    btnOpenPage(item) {
       console.log(item)
       // this.$router.push(item.path)
-      this.$router.push({name:item.name})
+      this.$router.push({ name: item.name })
     }
   },
   computed: {
@@ -34,7 +35,7 @@ export default {
       tagsList: stare => stare.tab.tabBreadcrumb,
     })
   },
-  mounted(){
+  mounted() {
     console.log('CommonTags => $route.name', this.$route.name)
     // console.log('CommonTags => $route.path', this.item.name)
   }
