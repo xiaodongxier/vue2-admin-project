@@ -27,7 +27,12 @@ export default {
          state.tabBreadcrumb.push(value) 
         }
       }
+    },
+    closeTage(state, item){
+      // this.state.tabBreadcrumb
+      const index = state.tabBreadcrumb.findIndex(val => val == item.name)
+      // console.log(state,item)
+      state.tabBreadcrumb.splice(index, 1)
     }
-
   }
 }
