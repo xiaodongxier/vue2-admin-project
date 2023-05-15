@@ -3,6 +3,12 @@
     <div class="header_contain_l">
       <el-button icon="el-icon-menu" size="mini" @click="btnClickAside"></el-button>
       <span class="text">首页</span>
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }" v-for="item in Breadcrumb" :key="item.name">{{ item.label }}</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
+        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+        <el-breadcrumb-item>活动详情</el-breadcrumb-item> -->
+      </el-breadcrumb>
     </div>
     <div class="header_contain_r">
       <el-dropdown>
@@ -22,10 +28,16 @@
 export default {
   methods: {
     btnClickAside() {
-      console.log(this.$store)
-      console.log(this.$store.state.tab.isCollapse)
+      // console.log(this.$store)
+      // console.log(this.$store.state.tab.isCollapse)
       this.$store.commit('collspseMenu')
-      console.log(this.$store.state.tab.isCollapse)
+      // console.log(this.$store.state.tab.isCollapse)
+    }
+  },
+  computed: {
+    Breadcrumb() {
+      return this.$store.state.tab.tabBreadcrumb
+      // console.log(this.$store.state.tab.tabBreadcrumb)
     }
   }
 }

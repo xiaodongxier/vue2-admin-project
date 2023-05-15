@@ -44,21 +44,21 @@ export default {
       menuData: [
         {
           path: '/',
-          // name: 'home',
+          name: 'home',
           label: '首页',
           icon: 's-home',
           url: 'Home/Home'
         },
         {
           path: '/mall',
-          // name: 'mall',
+          name: 'mall',
           label: '商品管理',
           icon: 'video-play',
           url: 'MallManage/MallManage'
         },
         {
           path: '/user',
-          // name: 'user',
+          name: 'user',
           label: '用户管理',
           icon: 'user',
           url: 'UserManage/UserManage'
@@ -69,14 +69,14 @@ export default {
           children: [
             {
               path: '/PageOne',
-              // name: 'PageOne',
+              name: 'PageOne',
               label: '页面1',
               icon: 'setting',
               url: 'Other/PageOne'
             },
             {
               path: '/PageTwo',
-              // name: 'PageTwo',
+              name: 'PageTwo',
               label: '页面2',
               icon: 'setting',
               url: 'Other/PageTwo'
@@ -101,6 +101,7 @@ export default {
         console.log("aside路由跳转数据", JSON.stringify(item, null, 2))
         this.$router.push(goPath)
       }
+      this.$store.commit('upBreadcrumb', item)
     },
     isCollapse() {
       return this.$store.state.tab.isCollapse
