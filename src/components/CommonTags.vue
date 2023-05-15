@@ -1,26 +1,41 @@
 <template>
   <div class="tagsList">
-    <el-tag closable v-for="item in tagsList" :key="item.name">{{ item.label }}</el-tag>
+    <!-- <el-tag :closable="item.name == 'home' ? false : true" v-for="item in tagsList" :key="item.name">{{ item.label }}</el-tag> -->
+    <el-tag :closable="item.name !== 'home'" v-for="item in tagsList" :key="item.name"  :effect="$route.name == item.name ? 'dark' : 'light'" @click="btnOpenPage(item)">{{ item.label }}</el-tag>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-  data() {
-    return {
-      tags: [
-        { name: '标签一', type: '' },
-        { name: '标签二', type: 'success' },
-        { name: '标签三', type: 'info' },
-        { name: '标签四', type: 'warning' },
-        { name: '标签五', type: 'danger' }
-      ]
-    };
+  // data() {
+  //   return {
+  //     tags: [
+  //       { name: '标签一', type: '' },
+  //       { name: '标签二', type: 'success' },
+  //       { name: '标签三', type: 'info' },
+  //       { name: '标签四', type: 'warning' },
+  //       { name: '标签五', type: 'danger' }
+  //     ]
+  //   };
+  // },
+  methods: {
+    btnOpenPage(item){
+      console.log(item)
+      this.$router.push(item.path)
+    }
   },
   computed: {
-    tagsList() {
-      return this.$store.state.tab.tabBreadcrumb
-    }
+    // tagsList() {
+    //   return this.$store.state.tab.tabBreadcrumb
+    // }
+    ...mapState({
+      tagsList: stare => stare.tab.tabBreadcrumb,
+    })
+  },
+  mounted(){
+    console.log('CommonTags => $route.name', this.$route.name)
+    // console.log('CommonTags => $route.path', this.item.name)
   }
 }
 </script>

@@ -23,11 +23,11 @@ const routes = [
     component: Main,
     redirect:'/home',
     children: [
-      {path: 'home',component: Home,},
-      {path: 'user',component: User,},
-      {path: 'mall',component: Mall,},
-      {path: 'PageOne',component: PageOne,},
-      {path: 'PageTwo',component: PageTwo,}
+      {path: 'home',name: 'home',component: Home,},
+      {path: 'user',name: 'user',component: User,},
+      {path: 'mall',name: 'mall',component: Mall,},
+      {path: 'PageOne',name: 'PageOne',component: PageOne,},
+      {path: 'PageTwo',name: 'PageTwo',component: PageTwo,}
     ]
   }
 ]
