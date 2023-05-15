@@ -22,7 +22,8 @@ export default {
   methods: {
     btnOpenPage(item){
       console.log(item)
-      this.$router.push(item.path)
+      // this.$router.push(item.path)
+      this.$router.push({name:item.name})
     }
   },
   computed: {
