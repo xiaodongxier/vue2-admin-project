@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 export default {
   // data() {
   //   return {
@@ -22,21 +22,23 @@ export default {
   //   };
   // },
   methods: {
+    //  辅助函数
+    ...mapMutations(['closeTage']),
     btnOpenPage(item) {
       // console.log(item)
       // this.$router.push(item.path)
       this.$router.push({ name: item.name })
     },
     // 关闭面包屑
+    // 常规方法 & 辅助函数
     closePages(item, index) {
       // es5
-      // console.log('关闭', item,index)
-      this.$store.commit('closeTage', item)
+      // this.$store.commit('closeTage', item)
+      this.closeTage(item)
       if(item.name !== this.$route.name) {
         console.log("删除的面包屑不是当前path")
       }
       const length = this.$store.state.tab.tabBreadcrumb.length;
-      console.log("================================",this.$store.state.tab.tabBreadcrumb[index-1].name)
       if(index === length ){
         this.$router.push({
           name: this.$store.state.tab.tabBreadcrumb[index-1].name
