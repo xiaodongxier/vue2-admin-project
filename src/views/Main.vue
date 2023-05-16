@@ -1,5 +1,5 @@
 <template>
-<div>
+  <div>
     <el-container class="aside_contain">
       <el-aside width="">
         <common-aside></common-aside>
@@ -28,7 +28,7 @@ export default {
     return {
 
     }
-  }, 
+  },
   components: {
     CommonAside,
     CommonHeader,
@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style scoped>
-.main_contain_r .el-header{
+.main_contain_r .el-header {
   padding: 0;
 }
 </style>

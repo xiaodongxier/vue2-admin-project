@@ -1,8 +1,9 @@
 <template>
   <div class="tagsList">
     <!-- <el-tag :closable="item.name == 'home' ? false : true" v-for="item in tagsList" :key="item.name">{{ item.label }}</el-tag> -->
-    <el-tag :closable="item.name !== 'home'" v-for="(item,index) in tagsList" :key="item.name"
-      :effect="$route.name == item.name ? 'dark' : 'light'" @click="btnOpenPage(item)" @close="closePages(item,index)">{{ item.label }}</el-tag>
+    <el-tag :closable="item.name !== 'home'" v-for="(item, index) in tagsList" :key="item.name"
+      :effect="$route.name == item.name ? 'dark' : 'light'" @click="btnOpenPage(item)" @close="closePages(item, index)">{{
+        item.label }}</el-tag>
   </div>
 </template>
 
@@ -22,13 +23,31 @@ export default {
   // },
   methods: {
     btnOpenPage(item) {
-      console.log(item)
+      // console.log(item)
       // this.$router.push(item.path)
       this.$router.push({ name: item.name })
     },
-    closePages(item,index){
-      console.log('关闭', item,index)
-      this.$store.commit('closeTage',item)
+    // 关闭面包屑
+    closePages(item, index) {
+      // es5
+      // console.log('关闭', item,index)
+      this.$store.commit('closeTage', item)
+      if(item.name !== this.$route.name) {
+        console.log("删除的面包屑不是当前path")
+      }
+      const length = this.$store.state.tab.tabBreadcrumb.length;
+      console.log("================================",this.$store.state.tab.tabBreadcrumb[index-1].name)
+      if(index === length ){
+        this.$router.push({
+          name: this.$store.state.tab.tabBreadcrumb[index-1].name
+            // name: this.tags[index - 1].name
+        })
+      }else{
+        this.$router.push({
+          name: this.$store.state.tab.tabBreadcrumb[index].name
+            // name: this.tags[index - 1].name
+        })
+      }
     }
   },
   computed: {
@@ -49,6 +68,8 @@ export default {
 <style scoped lang="less">
 .tagsList {
   .el-tag {
+    cursor: pointer;
+
     &:not(:last-child) {
       margin-right: 5px;
     }

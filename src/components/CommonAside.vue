@@ -5,7 +5,8 @@
            background-color="#ccc" text-color="#000" active-text-color="red" 
          -->
     <el-menu default-active="null" class="el-menu-vertical-demo aside_box" @open="handleOpen" @close="handleClose"
-      mode="vertical" :collapse="isCollapse()" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :collapse-transition="false">
+      mode="vertical" :collapse="isCollapse()" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b"
+      :collapse-transition="false">
       <h3 class="aside_title"> {{ isTitleMini() }}</h3>
       <!-- 导航1 -->
       <el-menu-item :index="item.path" v-for="item of noChildren" :key="item.name" @click="clickMenu(item)">

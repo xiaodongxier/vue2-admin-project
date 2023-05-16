@@ -17,11 +17,11 @@ export default {
       data.isCollapse = !data.isCollapse
     },
     upBreadcrumb(state,value) {
-      console.log('state',state)
-      console.log(',value',value)
+      // console.log('state',state)
+      // console.log(',value',value)
       // 判断是否为首页
       if(value.name !== 'home') {
-        console.log('value.name--------------------',value)
+        // console.log('value.name--------------------',value)
         const index = state.tabBreadcrumb.findIndex(item =>  item.name == value.name)
         if(index === -1) {
          state.tabBreadcrumb.push(value) 
@@ -30,8 +30,8 @@ export default {
     },
     closeTage(state, item){
       // this.state.tabBreadcrumb
-      const index = state.tabBreadcrumb.findIndex(val => val == item.name)
-      // console.log(state,item)
+      const index = state.tabBreadcrumb.findIndex(val => val.name == item.name)
+      // console.log("index ===================",index)
       state.tabBreadcrumb.splice(index, 1)
     }
   }
