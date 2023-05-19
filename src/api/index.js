@@ -14,12 +14,12 @@ export const addUser = (data) => {
 }
 
 
-export const editUser = () => {
-  return http.post('user/edit')
+export const editUser = (data) => {
+  return http.post('user/edit', data)
 }
 
-export const delUser = () => {
-  return http.post('user/del')
+export const delUser = (data) => {
+  return http.post('user/del', data)
 }
 
 // export const updateUser = () => {

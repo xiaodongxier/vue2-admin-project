@@ -13,21 +13,21 @@
         </el-form-item>
         <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
           <el-select v-model="form.sex" placeholder="请选择性别">
-            <el-option label="男" value="1"></el-option>
-            <el-option label="女" value="0"></el-option>
+            <el-option label="男" :value="1"></el-option>
+            <el-option label="女" :value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="出生日期" :label-width="formLabelWidth" prop="birth">
-          <el-date-picker v-model="form.birth" type="date" placeholder="选择日期" value-format="yyyy-MM-DD">
+          <el-date-picker v-model="form.birth" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="地址" :label-width="formLabelWidth" prop="addr">
-          <el-input v-model="form.addr" placeholder="请输入地址" type="textarea" :rows="3" maxlength="10"></el-input>
+          <el-input v-model="form.addr" placeholder="请输入地址" type="textarea" :rows="3" maxlength="1000"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <!-- <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button> -->
+        <el-button @click="cancel('form')">取 消</el-button>
+        <!-- <el-button @click="cancel('form')">取 消</el-button> -->
         <el-button type="primary" @click="submitForm">确 定</el-button>
       </div>
     </el-dialog>
@@ -54,7 +54,7 @@
 
 
 <script>
-import { getUser, addUser } from '../api'
+import { getUser, addUser, editUser, delUser } from '../api'
 export default {
   data() {
     return {
@@ -89,6 +89,7 @@ export default {
     };
   },
   methods: {
+    // 新增add
     handleBtnClickFrom() {
       this.dialogFormVisible = true
       this.modelType = 1
@@ -108,7 +109,7 @@ export default {
                   this.getList()
                 })
             } else {
-                addUser(this.form).then(() => {
+              editUser(this.form).then(() => {
                     // 重新获取列表的接口
                     this.getList()
                 })
@@ -125,6 +126,7 @@ export default {
       this.$refs.form.resetFields();
       this.dialogFormVisible = false;
     },
+    // 取消的时候
     cancel() {
       this.handleClose()
     },
@@ -133,12 +135,16 @@ export default {
       console.log("编辑", row)
       this.dialogFormVisible = true
       this.modelType = 1
-      this.form = row
-
+      // 深拷贝
+      this.form = JSON.parse(JSON.stringify(row))
+      // this.form = row
     },
     // 删除
     handleBtnDel(row) {
       console.log(row)
+      delUser().then(()=>{
+
+      })
     },
     // handleAdd(){
     //   this.modelType = 0
