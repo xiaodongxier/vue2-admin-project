@@ -108,22 +108,20 @@ export default {
           if (this.modelType === 0) {
             addUser(this.form).then(() => {
               // 重新获取列表的接口
-              alert("新增")
               this.getList()
-              // this.$message({
-              //   message: '新增成功',
-              //   type: 'success'
-              // });
+              this.$message({
+                message: '新增成功',
+                type: 'success'
+              });
             })
           } else {
             editUser(this.form).then(() => {
               // 重新获取列表的接口
               this.getList()
-              // alert("编辑")
-              // this.$message({
-              //   message: '编辑成功',
-              //   type: 'success'
-              // });
+              this.$message({
+                message: '编辑成功',
+                type: 'success'
+              });
             })
 
           }
@@ -159,9 +157,9 @@ export default {
       // 深拷贝
       // this.form = row
       // 处理清空不生效的问题
-      // this.$nextTick(() => {
+      this.$nextTick(() => {
         this.form = JSON.parse(JSON.stringify(row))
-      // })
+      })
     },
     // 删除
     handleBtnDel(row) {
