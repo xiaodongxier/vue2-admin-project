@@ -8,7 +8,8 @@ Mock.mock('/api/home/getDate', homeApi.getStatisticalData)
 Mock.mock('/api/user/add','post' , userApi.createUser)
 Mock.mock('/api/user/edit','post' , userApi.updateUser)
 Mock.mock('/api/user/del','post' , userApi.deleteUser)
-Mock.mock('/api/user/getUser', userApi.getUserList)
+// Mock.mock('/api/user/getUser', userApi.getUserList)
+Mock.mock(/api\/user\/getUser/, userApi.getUserList)
 
 
 

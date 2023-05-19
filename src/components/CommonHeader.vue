@@ -13,7 +13,7 @@
     <div class="header_contain_r">
       <el-dropdown>
         <span>
-          <img src="../assets/favicon.jpg" alt="">
+          <img src="https://github.com/favicon.ico" alt="">
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人中心</el-dropdown-item>

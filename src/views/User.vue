@@ -1,7 +1,16 @@
 <template>
   <div class="user_box">
     <!-- Form -->
-    <el-button type="primary" @click="handleBtnClickFrom" size="small">+ 新增</el-button>
+    <div class="user_header">
+      <el-button type="primary" @click="handleBtnClickFrom" size="small">+ 新增</el-button>
+      <div>
+        <el-form :model="userSerach">
+          <el-input v-model="serach" placeholder="请输入内容"></el-input>
+          <el-button type="primary" style="margin-left: 3px;">搜索</el-button>
+        </el-form>
+      </div>
+      
+    </div>
 
     <el-dialog :title="userTitle" :visible.sync="dialogFormVisible" width="50%" :before-close="handleClose">
       <el-form :model="form" :inline="true" :label-position="labelPosition" :rules="rules" ref="form">
@@ -32,7 +41,7 @@
       </div>
     </el-dialog>
 
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%"  height="90%">
       <el-table-column prop="name" label="姓名" width="180"></el-table-column>
       <el-table-column prop="age" label="年龄" width="180"></el-table-column>
       <el-table-column prop="sex" label="性别" width="180">
@@ -49,6 +58,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-size="pageDate.limit"
+      :total="total"
+      @current-change="clickPages"
+      >
+    </el-pagination>
   </div>
 </template>
 
@@ -61,6 +78,7 @@ export default {
       userTitle: '新增用户',
       labelPosition: 'right',
       dialogFormVisible: false,
+      serach: '搜索',
       form: {
         name: '',
         age: '',
@@ -86,7 +104,15 @@ export default {
         // }
       ],
       // 0 新增，1编辑
-      modelType: 0
+      modelType: 0,
+      total: 0,
+      pageDate: {
+        page: 1,
+        limit: 10
+      },
+      userSerach: {
+          name: ''
+      }
     };
   },
   methods: {
@@ -189,10 +215,18 @@ export default {
     //   this.dialogFormVisible = true
     // },
     getList() {
-      getUser().then((data) => {
-        // console.log(data.data.list)
+      getUser({params:this.pageDate}).then((data) => {
+        console.log(data.data)
         this.tableData = data.data.list
+        this.total = data.data.count
       })
+    },
+    // 切换页数
+    clickPages(val){
+      this.pageDate.page = val
+      console.log(val)
+      this.getList()
+      console.log("切换页码", this.tableData)
     }
   },
   mounted() {
@@ -211,7 +245,11 @@ export default {
 
 <style scoped lang="less">
 .user_box {
-
+  height: 90%;
+  .user_header {
+    display: flex;
+    justify-content: space-between;
+  }
   /deep/.el-form-item__content,
   /deep/.el-select,
   /deep/.el-input {
@@ -227,3 +265,4 @@ export default {
 // 重制表单
 this.$refs.form.resetFields();
  -->
+
