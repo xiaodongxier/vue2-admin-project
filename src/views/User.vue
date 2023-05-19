@@ -3,7 +3,7 @@
     <!-- Form -->
     <el-button type="primary" @click="handleBtnClickFrom" size="small">+ 新增</el-button>
 
-    <el-dialog title="新增用户" :visible.sync="dialogFormVisible" width="50%" :before-close="handleClose">
+    <el-dialog :title="userTitle" :visible.sync="dialogFormVisible" width="50%" :before-close="handleClose">
       <el-form :model="form" :inline="true" :label-position="labelPosition" :rules="rules" ref="form">
         <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
@@ -58,6 +58,7 @@ import { getUser, addUser, editUser, delUser } from '../api'
 export default {
   data() {
     return {
+      userTitle: '新增用户',
       labelPosition: 'right',
       dialogFormVisible: false,
       form: {
@@ -89,61 +90,83 @@ export default {
     };
   },
   methods: {
-    // 新增add
+    // 新增add0 ，编辑1
     handleBtnClickFrom() {
+      this.userTitle = '新增用户'
       this.dialogFormVisible = true
-      this.modelType = 1
+      this.modelType = 0
       // this.$refs.form.resetFields();
     },
+    // 提交，确定
     submitForm() {
       // validate对整个表单进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise
       this.$refs.form.validate((valid) => {
         console.log('表单是否通过', valid)
-        console.log('this.from', this.from)
-
+        // console.log('this.from', this.from)
         if (valid) {
           // 后续对表单数据的处理
-          if (this.modalType === 0) {
+          if (this.modelType === 0) {
             addUser(this.form).then(() => {
-                // 重新获取列表的接口
-                  this.getList()
-                })
-            } else {
-              editUser(this.form).then(() => {
-                    // 重新获取列表的接口
-                    this.getList()
-                })
-            }
-          // 成功关闭弹窗,放在前面获取不到的
-          this.dialogFormVisible = false;
-          this.$refs.form.resetFields();
+              // 重新获取列表的接口
+              alert("新增")
+              this.getList()
+              // this.$message({
+              //   message: '新增成功',
+              //   type: 'success'
+              // });
+            })
+          } else {
+            editUser(this.form).then(() => {
+              // 重新获取列表的接口
+              this.getList()
+              // alert("编辑")
+              // this.$message({
+              //   message: '编辑成功',
+              //   type: 'success'
+              // });
+            })
 
+          }
+          // // 成功关闭弹窗,放在前面获取不到的
+          // this.dialogFormVisible = false;
+          // this.$refs.form.resetFields();
+          this.handleClose()
         }
       })
     },
     // 感觉多余的一步
     handleClose() {
-      this.$refs.form.resetFields();
       this.dialogFormVisible = false;
+      // this.$refs.form.resetFields();
+      // this.$refs[form].resetFields();
+      this.$refs['form'].resetFields();
+      // 解决重置无效的问题
+      // this.$data.form = JSON.parse(JSON.stringify(this.$options.data().form))
+      // this.$data.form = 
+
     },
     // 取消的时候
     cancel() {
       this.handleClose()
+      // this.form = {}
     },
     // 编辑
     handleBtnEdit(row) {
-      console.log("编辑", row)
+      this.userTitle = '编辑用户'
+      // console.log("编辑", row)
       this.dialogFormVisible = true
       this.modelType = 1
       // 深拷贝
-      this.form = JSON.parse(JSON.stringify(row))
       // this.form = row
+      // 处理清空不生效的问题
+      // this.$nextTick(() => {
+        this.form = JSON.parse(JSON.stringify(row))
+      // })
     },
     // 删除
     handleBtnDel(row) {
-      console.log(row)
-      delUser().then(()=>{
-
+      console.log("删除", row)
+      delUser().then(() => {
       })
     },
     // handleAdd(){
@@ -152,7 +175,7 @@ export default {
     // },
     getList() {
       getUser().then((data) => {
-        console.log(data.data.list)
+        // console.log(data.data.list)
         this.tableData = data.data.list
       })
     }
