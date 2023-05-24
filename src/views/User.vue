@@ -1,18 +1,43 @@
 <template>
   <div class="user_box">
     <!-- Form -->
+    <!-- 新增/搜索 -->
     <div class="user_header">
       <el-button type="primary" @click="handleBtnClickFrom" size="small">+ 新增</el-button>
-      <div>
-        <el-form :model="userSerach">
-          <el-input v-model="serach" placeholder="请输入内容"></el-input>
-          <el-button type="primary" style="margin-left: 3px;">搜索</el-button>
+      <div class="search_wrap">
+        <el-form :model="userSerach" :inline="true">
+          <el-form-item>
+            <el-input v-model="userSerach.name" placeholder="请输入内容" size="small"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="small" @click="btnClickSerach">搜索</el-button>
+          </el-form-item>
         </el-form>
+        <!-- form搜索区域 -->
+        <!-- <el-form :inline="true" :model="userSerach">
+          <el-form-item>
+            <el-input placeholder="请输入名称" v-model="userSerach.name"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="btnClickSerach">查询</el-button>
+          </el-form-item>
+        </el-form> -->
+
+        <!-- 
+        <el-form :inline="true" :model="userForm">
+                <el-form-item>
+                    <el-input placeholder="请输入名称" v-model="userForm.name"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                </el-form-item>
+            </el-form> -->
       </div>
-      
     </div>
 
-    <el-dialog :title="userTitle" :visible.sync="dialogFormVisible" width="50%" :before-close="handleClose">
+    <!-- 新增弹窗表单 -->
+    <el-dialog :title="userTitle" :visible.sync="dialogFormVisible" width="50%" :before-close="handleClose"
+      class="add_table">
       <el-form :model="form" :inline="true" :label-position="labelPosition" :rules="rules" ref="form">
         <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
@@ -41,7 +66,8 @@
       </div>
     </el-dialog>
 
-    <el-table :data="tableData" style="width: 100%"  height="90%">
+    <!-- 列表渲染 -->
+    <el-table :data="tableData" style="width: 100%" height="90%">
       <el-table-column prop="name" label="姓名" width="180"></el-table-column>
       <el-table-column prop="age" label="年龄" width="180"></el-table-column>
       <el-table-column prop="sex" label="性别" width="180">
@@ -58,13 +84,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      background
-      layout="prev, pager, next"
-      :page-size="pageDate.limit"
-      :total="total"
-      @current-change="clickPages"
-      >
+
+    <!-- 分页 -->
+    <el-pagination background layout="prev, pager, next" :page-size="pageDate.limit" :total="total"
+      @current-change="clickPages">
     </el-pagination>
   </div>
 </template>
@@ -78,7 +101,9 @@ export default {
       userTitle: '新增用户',
       labelPosition: 'right',
       dialogFormVisible: false,
-      serach: '搜索',
+      userSerach: {
+        name: '******'
+      },
       form: {
         name: '',
         age: '',
@@ -109,9 +134,6 @@ export default {
       pageDate: {
         page: 1,
         limit: 10
-      },
-      userSerach: {
-          name: ''
       }
     };
   },
@@ -195,12 +217,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delUser({id: row.id}).then(() => { 
+        delUser({ id: row.id }).then(() => {
           this.getList()
           this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
+            type: 'success',
+            message: '删除成功!'
+          });
         })
 
       }).catch(() => {
@@ -215,18 +237,30 @@ export default {
     //   this.dialogFormVisible = true
     // },
     getList() {
-      getUser({params:this.pageDate}).then((data) => {
-        console.log(data.data)
-        this.tableData = data.data.list
-        this.total = data.data.count
+      // getUser({ params: this.pageDate }).then((data) => {
+      //   console.log(data.data)
+      //   this.tableData = data.data.list
+      //   this.total = data.data.count
+      // })
+      // 合并对象属性
+      getUser({ params: { ...this.userSerach, ...this.pageDate } }).then(({ data }) => {
+        // console.log("------------------------------------------", data.list)
+        this.tableData = data.list
+
+        this.total = data.count || 0
       })
+
     },
     // 切换页数
-    clickPages(val){
+    clickPages(val) {
       this.pageDate.page = val
       console.log(val)
       this.getList()
+      console.log("切换页码", val)
       console.log("切换页码", this.tableData)
+    },
+    btnClickSerach() {
+      this.getList()
     }
   },
   mounted() {
@@ -246,18 +280,28 @@ export default {
 <style scoped lang="less">
 .user_box {
   height: 90%;
+
   .user_header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    .search_wrap .el-form-item {
+      margin-bottom: 0;
+    }
+
+    .add_table {
+
+      /deep/.el-form-item__content,
+      /deep/.el-select,
+      /deep/.el-input {
+        width: 240px;
+      }
+    }
   }
-  /deep/.el-form-item__content,
-  /deep/.el-select,
-  /deep/.el-input {
-    width: 240px;
-  }
+
 }
 </style>
-
 
 
 <!-- 
