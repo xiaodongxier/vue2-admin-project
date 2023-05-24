@@ -102,7 +102,7 @@ export default {
       labelPosition: 'right',
       dialogFormVisible: false,
       userSerach: {
-        name: '******'
+        name: ''
       },
       form: {
         name: '',
